@@ -2,25 +2,30 @@ package view;
 
 import exception.InputValidation;
 import exception.MyException;
+import repository.TelBookRepository;
+import service.TelBookService;
 
 import java.util.Scanner;
 
 public class UserView {
     private final Scanner scanner;
+    private final TelBookService service;
 
-    public UserView(Scanner scanner) {
+    public UserView(Scanner scanner, TelBookService service) {
         this.scanner = scanner;
+        this.service = service;
     }
 
     // 검증 클래스 생성
     InputValidation validation = new InputValidation();
-    // 입력 자료 저장을 위한 변수 선언
-    String name;
-    int age;
-    String phone;
-    String address;
+
 
     public void insert() throws MyException {
+        // 입력 자료 저장을 위한 변수 선언
+        String name = "";
+        int age = 0;
+        String phone = "";
+        String address = "'";
         System.out.println("== 전화번호 등록 ==");
         // 이름 올바른 값이 들어올 때까지 반복
         boolean nameOk = false;
@@ -40,7 +45,7 @@ public class UserView {
         do {
             try {
                 System.out.println("나이: ");
-                int age = scanner.nextInt();
+                age = scanner.nextInt();
                 validation.ageCheck(age);
                 ageOk = true;
             } catch (Exception e) {
@@ -49,19 +54,20 @@ public class UserView {
         } while (!ageOk);
         // 주소
         System.out.println("주소: ");
-        String address = scanner.next();
+        address = scanner.next();
         // 전화번호: 010-XXXX-XXXX
         boolean phoneOk = false;
         do {
             try {
                 System.out.println("전화번호: ");
-                String phone = scanner.next();
+                phone = scanner.next();
                 validation.phoneCheck(phone);
                 phoneOk = true;
             } catch (MyException e) {
                 System.out.println(e.getMessage());
             }
         } while (!phoneOk);
+        service.insert(name, age, address, phone);
     }
 
     public void update() {

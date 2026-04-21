@@ -1,5 +1,7 @@
 import db.DBConn;
 import exception.MyException;
+import repository.TelBookRepository;
+import service.TelBookService;
 import view.UserView;
 
 import java.sql.Connection;
@@ -7,10 +9,14 @@ import java.util.Scanner;
 
 public class TelBookMain {
     public static void main(String[] args) throws MyException {
-        Connection connection = DBConn.getConnection();
+//        Connection connection = DBConn.getConnection();
+
         Scanner sc = new Scanner(System.in);
+        TelBookRepository repository = new TelBookRepository();
+        TelBookService service = new TelBookService(repository);
+
         // UserView 인스턴스 생성
-        UserView userView = new UserView(sc);
+        UserView userView = new UserView(sc, service);
         int input;
         while (true) {
             do {
