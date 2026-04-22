@@ -1,6 +1,5 @@
 package repository;
 
-import db.DBConn;
 import dto.TelDto;
 
 import java.sql.Connection;
@@ -18,7 +17,6 @@ public class TelBookRepository {
     }
 
     public int insertData(TelDto dto) {
-
         PreparedStatement psmt = null;
         // 2. 쿼리 생성
         // 실행 결과를 담을 변수
@@ -64,8 +62,37 @@ public class TelBookRepository {
                 // 만들어진 dto를 List에 담는다.
                 dtoList.add(dto);
             }
+            // psmt, rs 닫아주는 작업
+            psmt.close();
+            rs.close();
         } catch (Exception e) {
             System.out.println("Find All Error: " + e.getMessage());
+        }
+        return dtoList;
+    }
+
+    public List<TelDto> findById(int id) {
+        List<TelDto> dtoList = new ArrayList<>();
+        PreparedStatement psmt = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT * FROM telbook where id = ?";
+            psmt = conn.prepareStatement(sql);
+            psmt.setLong(1, id);
+            rs = psmt.executeQuery();
+            // 리스트에 추가
+            while (rs.next()) {
+                TelDto dto = new TelDto();
+                dto.setId(rs.getLong("id"));
+                dto.setName(rs.getString("name"));
+                dto.setAge(rs.getInt("age"));
+                dto.setAddress(rs.getString("address"));
+                dto.setTelNumber(rs.getString("phone"));
+                dtoList.add(dto);
+            }
+        }
+        catch (Exception e) {
+            System.out.println("FindById Error: " + e.getMessage());
         }
         return dtoList;
     }
