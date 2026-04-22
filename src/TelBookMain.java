@@ -9,10 +9,10 @@ import java.util.Scanner;
 
 public class TelBookMain {
     public static void main(String[] args) throws MyException {
-//        Connection connection = DBConn.getConnection();
+        Connection connection = DBConn.getConnection();
 
         Scanner sc = new Scanner(System.in);
-        TelBookRepository repository = new TelBookRepository();
+        TelBookRepository repository = new TelBookRepository(connection);
         TelBookService service = new TelBookService(repository);
 
         // UserView 인스턴스 생성
@@ -37,7 +37,7 @@ public class TelBookMain {
                 case 4:
                     userView.searchAll();
                     break;
-                case 5:
+                case 5: // ID로 1개 검색
                     userView.searchOne();
                     break;
                 case 6:
