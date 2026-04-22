@@ -76,7 +76,7 @@ public class TelBookRepository {
         PreparedStatement psmt = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM telbook where id = ?";
+            String sql = "SELECT * FROM telbook WHERE id = ?";
             psmt = conn.prepareStatement(sql);
             psmt.setLong(1, id);
             rs = psmt.executeQuery();
@@ -90,10 +90,28 @@ public class TelBookRepository {
                 dto.setTelNumber(rs.getString("phone"));
                 dtoList.add(dto);
             }
-        }
-        catch (Exception e) {
+            psmt.close();
+            rs.close();
+        } catch (Exception e) {
             System.out.println("FindById Error: " + e.getMessage());
         }
         return dtoList;
+    }
+
+    public int deleteById(int id) {
+        PreparedStatement psmt = null;
+        // 2. 쿼리 생성
+        // 실행 결과를 담을 변수
+        int result = 0;
+        try {
+            String sql = "DELETE FROM telbook WHERE id = ?";
+            psmt = conn.prepareStatement(sql);
+            psmt.setLong(1, id);
+            result = psmt.executeUpdate();
+            psmt.close();
+        } catch (Exception e) {
+            System.out.println("Delete 오류: " + e.getMessage());
+        }
+        return result;
     }
 }
